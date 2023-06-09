@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import StatusPage from './components/StatusPage';
 import NavBar from './components/NavBar';
@@ -14,9 +13,9 @@ function App() {
       <BrowserRouter>
         <main>
           <Routes>
-            <Route path="/all-feeds" element={<RssFeedPage/>} />
-            <Route path="/metrics" element={<Metric/>} />
-            <Route path="/" element = {<StatusPage/>} />
+            <Route path="/all-feeds" element={<RssFeedPage />} />
+            <Route path="/metrics" element={<Metric />} />
+            <Route path="/" element={<StatusPage />} />
           </Routes>
         </main>
       </BrowserRouter>

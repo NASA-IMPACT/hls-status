@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { BeatLoader } from 'react-spinners';
-import '../styles/RSSFeed.css';
-
 import ReactPaginate from 'react-paginate';
+import '../styles/RSSFeed.css';
+import { RSS_FEED_URL } from '../config';
+
 
 function RssFeedPage() {
     const location = useLocation();
@@ -11,7 +12,6 @@ function RssFeedPage() {
     let items = location.state.allItems;
 
     const [allItems, setAllItems] = useState([]);
-    const RSS_FEED_URL = 'https://inthub.copernicus.eu/news/WebRss20';
     const [rssLoading, setRSSLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(0);
     const itemsPerPage = 10; // Number of items to display per page
@@ -67,7 +67,7 @@ function RssFeedPage() {
                     <i className="far fa-calendar-alt calendar-icon"></i>
                     <span className="greyed-out">{item.pubDate}</span>
                 </p>
-                <a className="feed-item-link" href={item.link} target='_blank'>Read More <i className="fas fa-external-link-alt" aria-hidden="true"></i></a>
+                <a className="feed-item-link" href={item.link} target='_blank' rel="noreferrer">Read More <i className="fas fa-external-link-alt" aria-hidden="true"></i></a>
             </div>
         </div>
     ));

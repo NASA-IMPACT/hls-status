@@ -97,7 +97,9 @@ const Metric = (props) => {
     return (
         <div className={`${isFromLink ? 'widget' : 'widget-min'}`}>
             {loading ? (
-                <BeatLoader color="#36D7B7" loading={loading} />
+                <div className="loader-container">
+                    <BeatLoader color="#36D7B7" loading={loading} />
+                </div>
             ) : error ? (
                 <div className="no-data-message">No data available</div>
             ) : (
@@ -143,7 +145,7 @@ const Metric = (props) => {
                         </div>)}
                     <div className="horizontal-container">
                         {executionsSucceededData.map((data, index) => (
-                            <div className="metric-widget">
+                            <div key={index} className="metric-widget">
                                 <div className="widget-item">
                                     <h4 className="widget-value">{granulesTitle}</h4>
                                 </div>

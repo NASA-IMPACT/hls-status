@@ -3,11 +3,10 @@ import '../styles/StylePage.css';
 import { BeatLoader } from 'react-spinners';
 import { Link } from 'react-router-dom';
 import Metric from '../components/Metric';
-import {ALARM_URL, RSS_FEED_URL} from '../config';
+import { ALARM_URL, RSS_FEED_URL } from '../config';
 
 
 function StatusPage() {
-  const [title, setTitle] = useState("");
   const [alarms, setAlarms] = useState([]);
   const [showDetails, setShowDetails] = useState(false);
   const [selectedAlarm, setSelectedAlarm] = useState(null);
@@ -147,16 +146,17 @@ function StatusPage() {
         <h1 className="welcome-content">Welcome to Harmonized Landsat Sentinel-2 Status Page</h1>
       </div>
 
-      <div style={{ display: "flex", justifyContent: 'center' }}>
-
+      <div className="main-container">
         <div className="title-container">
           <h1 className="title-content">HLS Status Past 24 hours</h1>
           {loading ? (
-            <BeatLoader color="#36D7B7" loading={loading} />
+            <div className="loader-container">
+              <BeatLoader color="#36D7B7" loading={loading} />
+            </div>
           ) : (
             <div>
               {alarms.map((alarm, index) => (
-                <div className={`status-main ${alarm.state === 'OK' ? 'ok-status' : 'danger-status'}`}>
+                <div  key={index} className={`status-main ${alarm.state === 'OK' ? 'ok-status' : 'danger-status'}`}>
                   <div className="status-container" key={index}>
                     <div className="status-item" >
                       <h3 className="status-title">
@@ -178,9 +178,9 @@ function StatusPage() {
                     <i style={{ marginLeft: "8px" }} className={selectedAlarm === alarm ? 'fas fa-angle-up' : 'fas fa-angle-down'}></i></h4>
                   {selectedAlarm === alarm && (
                     <div className="status-history">
-                      <Metric alarm={alarm}/>
-                      <h4><Link to='/metrics' state = {{alarm}} className="title-link">View More Details
-                      <i style={{ marginLeft: "8px" }} className='fas fa-angle-right'></i></Link></h4>
+                      <Metric alarm={alarm} />
+                      <h4><Link to='/metrics' state={{ alarm }} className="title-link">View More Details
+                        <i style={{ marginLeft: "8px" }} className='fas fa-angle-right'></i></Link></h4>
                     </div>
                   )}
                 </div>
@@ -199,7 +199,9 @@ function StatusPage() {
             </Link>
           </div>
           {rssLoading ? (
-            <BeatLoader color="#36D7B7" loading={rssLoading} />
+            <div className="loader-container">
+              <BeatLoader color="#36D7B7" loading={rssLoading} />
+            </div>
           ) : (
 
             <ul style={{ padding: "10px" }}>
@@ -212,7 +214,7 @@ function StatusPage() {
                       <i className="far fa-calendar-alt calendar-icon"></i>
                       <span className="greyed-out">{item.pubDate}</span>
                     </p>
-                    <a className="feed-item-link" href={item.link} target='_blank'>Read More <i className="fas fa-external-link-alt" aria-hidden="true"></i></a>
+                    <a className="feed-item-link" href={item.link} target='_blank' rel="noreferrer">Read More <i className="fas fa-external-link-alt" aria-hidden="true"></i></a>
                   </div>
                 </div>
               ))}
