@@ -1,0 +1,51 @@
+nav {
+    background-color: #2276ac;
+    color: #fff;
+  }
+  
+  nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+  
+  nav ul li {
+    margin-right: 1rem;
+    position: relative;
+  }
+  
+  nav ul li:hover ul {
+    display: block;
+  }
+  
+  nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    padding: 1rem;
+    display: block;
+  }
+  
+  nav ul li ul {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #333;
+    padding: 0;
+  }
+  
+  nav ul li ul li {
+    margin: 0;
+  }
+  
+  nav ul li ul li a {
+    padding: 0.5rem 1rem;
+  }
+  
+  img {
+    height: 50px;
+    /* width: 50px; */
+    margin: 10px;
+  }
+  

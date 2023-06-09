@@ -1,0 +1,14 @@
+node_modules
+build
+package-lock.json
+
+.DS_Store
+.DS_STORE
+
+.idea
+.resources
+.node_history
+temp
+tmp
+.tmp
+dist
