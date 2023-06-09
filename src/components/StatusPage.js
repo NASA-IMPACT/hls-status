@@ -179,7 +179,8 @@ function StatusPage() {
                   {selectedAlarm === alarm && (
                     <div className="status-history">
                       <Metric alarm={alarm}/>
-                      <Link to='/metrics' state = {{alarm}} className="title-link">View More Details</Link>
+                      <h4><Link to='/metrics' state = {{alarm}} className="title-link">View More Details
+                      <i style={{ marginLeft: "8px" }} className='fas fa-angle-right'></i></Link></h4>
                     </div>
                   )}
                 </div>

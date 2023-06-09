@@ -95,7 +95,7 @@ const Metric = (props) => {
     };
 
     return (
-        <div className="widget">
+        <div className={`${isFromLink ? 'widget' : 'widget-min'}`}>
             {loading ? (
                 <BeatLoader color="#36D7B7" loading={loading} />
             ) : error ? (
