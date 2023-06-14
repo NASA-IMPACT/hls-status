@@ -3,81 +3,17 @@ import '../styles/StylePage.css';
 import { BeatLoader } from 'react-spinners';
 import { Link } from 'react-router-dom';
 import Metric from '../components/Metric';
-import { ALARM_URL, RSS_FEED_URL } from '../config';
+import { ALARM_URL, RSS_FEED_URL, HLS_TITLE } from '../utilities/config';
 
 
 function StatusPage() {
   const [alarms, setAlarms] = useState([]);
-  const [showDetails, setShowDetails] = useState(false);
   const [selectedAlarm, setSelectedAlarm] = useState(null);
   const [feedItems, setFeedItems] = useState([]);
   const [allItems, setAllItems] = useState([]);
   // const RSS_FEED_URL = 'https://www.usgs.gov/science-support/322/news/feed';
   const [loading, setLoading] = useState(true);
   const [rssLoading, setRSSLoading] = useState(true);
-
-  let alarm = [
-    {
-      "alarm_name": "L30 Produced 24 hours",
-      "state": "OK",
-      "state_transitioned_timestamp": "2023-03-07 17:47:34.524000+00:00",
-      "state_updated_timestamp": "2023-03-07 17:47:34.524000+00:00",
-      "alarm_history_items": []
-    },
-    {
-      "alarm_name": "S30 Produced 24 hours",
-      "state": "OK",
-      "state_transitioned_timestamp": "2023-04-14 02:38:25.405000+00:00",
-      "state_updated_timestamp": "2023-04-14 02:38:25.405000+00:00",
-      "alarm_history_items": {
-        "version": "1.0",
-        "oldState": {
-          "stateValue": "ALARM",
-          "stateReason": "Threshold Crossed: 1 out of the last 1 datapoints [6986.0 (10/04/23 07:24:00)] was less than the threshold (7000.0) (minimum 1 datapoint for OK -> ALARM transition).",
-          "stateReasonData": {
-            "version": "1.0",
-            "queryDate": "2023-04-11T07:24:25.428+0000",
-            "startDate": "2023-04-10T07:24:00.000+0000",
-            "statistic": "Sum",
-            "period": 86400,
-            "recentDatapoints": [
-              6986.0
-            ],
-            "threshold": 7000.0,
-            "evaluatedDatapoints": [
-              {
-                "timestamp": "2023-04-10T07:24:00.000+0000",
-                "sampleCount": 18777.0,
-                "value": 6986.0
-              }
-            ]
-          }
-        },
-        "newState": {
-          "stateValue": "OK",
-          "stateReason": "Threshold Crossed: 1 out of the last 1 datapoints [7007.0 (10/04/23 14:42:00)] was not less than the threshold (7000.0) (minimum 1 datapoint for ALARM -> OK transition).",
-          "stateReasonData": {
-            "version": "1.0",
-            "queryDate": "2023-04-11T14:42:25.397+0000",
-            "startDate": "2023-04-10T14:42:00.000+0000",
-            "statistic": "Sum",
-            "period": 86400,
-            "recentDatapoints": [
-              7007.0
-            ],
-            "threshold": 7000.0,
-            "evaluatedDatapoints": [
-              {
-                "timestamp": "2023-04-10T14:42:00.000+0000",
-                "sampleCount": 16412.0,
-                "value": 7007.0
-              }
-            ]
-          }
-        }
-      }
-    }
-  ]
 
   useEffect(() => {
 
@@ -125,12 +61,6 @@ function StatusPage() {
     return `${formattedDate} (${timezone})`;
   };
 
-  const toggleDetails = (index) => {
-    setSelectedAlarm(alarms[index].alarm_history_items);
-    // console.log(selectedAlarm);
-    setShowDetails(!showDetails);
-  };
-
   const handleAlarmClick = alarm => {
     if (selectedAlarm === alarm) {
       setSelectedAlarm(null); // deselect the alarm if already selected
@@ -143,7 +73,7 @@ function StatusPage() {
   return (
     <div>
       <div className="welcome-container">
-        <h1 className="welcome-content">Welcome to Harmonized Landsat & Sentinel-2 Status Page</h1>
+        <h1 className="welcome-content">Welcome to {HLS_TITLE} Status Page</h1>
       </div>
 
       <div className="main-container">

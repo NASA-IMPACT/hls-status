@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { BeatLoader } from 'react-spinners';
 import ReactPaginate from 'react-paginate';
 import '../styles/RSSFeed.css';
-import { RSS_FEED_URL } from '../config';
+import { RSS_FEED_URL } from '../utilities/config';
 
 
 function RssFeedPage() {

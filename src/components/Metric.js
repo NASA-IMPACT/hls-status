@@ -4,7 +4,7 @@ import { BeatLoader } from 'react-spinners';
 import { useLocation } from 'react-router-dom';
 import { Chart, ArcElement, Legend, Tooltip } from 'chart.js'
 import { Doughnut } from 'react-chartjs-2';
-import { METRIC_URL } from '../config';
+import { METRIC_URL } from '../utilities/config';
 
 
 Chart.register(ArcElement, Legend, Tooltip);

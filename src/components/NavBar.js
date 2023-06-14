@@ -1,5 +1,6 @@
 import React from 'react';
 import '../styles/NavBar.css'
+import {HLS_TITLE} from '../utilities/config';
 
 function Navbar() {
   return (
@@ -9,7 +10,7 @@ function Navbar() {
           <li>
           <a href="/" style={{ display: 'flex', alignItems: 'center' }}>
             {/* <img src="logoinv.png" alt="Logo" /> */}
-            <h1>Harmonized Landsat and Sentinel-2</h1>
+            <h1>{HLS_TITLE}</h1>
           </a>
           </li>
         </ul>
