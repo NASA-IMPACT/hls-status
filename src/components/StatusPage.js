@@ -143,7 +143,7 @@ function StatusPage() {
   return (
     <div>
       <div className="welcome-container">
-        <h1 className="welcome-content">Welcome to Harmonized Landsat Sentinel-2 Status Page</h1>
+        <h1 className="welcome-content">Welcome to Harmonized Landsat and Sentinel-2 Status Page</h1>
       </div>
 
       <div className="main-container">
