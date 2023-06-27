@@ -3,7 +3,7 @@ import '../styles/StylePage.css';
 import { BeatLoader } from 'react-spinners';
 import { Link } from 'react-router-dom';
 import Metric from '../components/Metric';
-import { ALARM_URL, RSS_FEED_URL, HLS_TITLE } from '../utilities/config';
+import { ALARM_URL, INTHUB_RSS_FEED_URL, USGS_RSS_FEED_URL, HLS_TITLE } from '../utilities/config';
 
 
 function StatusPage() {
@@ -11,7 +11,6 @@ function StatusPage() {
   const [selectedAlarm, setSelectedAlarm] = useState(null);
   const [feedItems, setFeedItems] = useState([]);
   const [allItems, setAllItems] = useState([]);
-  // const RSS_FEED_URL = 'https://www.usgs.gov/science-support/322/news/feed';
   const [loading, setLoading] = useState(true);
   const [rssLoading, setRSSLoading] = useState(true);
 
@@ -19,38 +18,72 @@ function StatusPage() {
 
     setLoading(true);
     setRSSLoading(true);
-    fetch(ALARM_URL)
-      .then(response => response.json())
-      .then(data => {
-        setLoading(false);
-        let content = JSON.parse(data.body);
-        setAlarms(content);
-      })
-      .catch(error => console.error(error));
 
+    const fetchAlarm = () => {
+      fetch(ALARM_URL)
+        .then(response => response.json())
+        .then(data => {
+          let content = JSON.parse(data.body);
+          setAlarms(content);
+        })
+        .catch(error => console.error(error))
+        .finally(() => setLoading(false));
+    };
 
-    fetch(RSS_FEED_URL)
-      .then(response => response.text())
-      .then(data => {
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(data, 'application/xml');
-        let items = Array.from(xml.querySelectorAll('item'));
+    const fetchRssFeeds = async () => {
+      try {
+        const [inthubResponse, usgsResponse] = await Promise.all([
+          fetch(INTHUB_RSS_FEED_URL),
+          fetch(USGS_RSS_FEED_URL)
+        ]);
 
-        const allItems = items.map(item => ({
-          title: item.querySelector('title').textContent,
-          link: item.querySelector('link').textContent,
-          description: item.querySelector('description').textContent,
-          pubDate: item.querySelector('pubDate').textContent,
-          guid: item.querySelector('guid').textContent,
-        }));
-        setRSSLoading(false);
-        setFeedItems(allItems.slice(0, 5));
-        setAllItems(allItems);
-      })
-      .catch(error => {
+        const [inthubXml, usgsXml] = await Promise.all([
+          inthubResponse.text(),
+          usgsResponse.text()
+        ]);
+
+        const inthubAllItems = parseXml(inthubXml, true);
+        let contentBody = JSON.parse(usgsXml).body;
+        const usgsAllItems = parseXml(contentBody, false);
+
+        const mergedItems = [...inthubAllItems, ...usgsAllItems];
+        const sortedItems = mergedItems.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+        setFeedItems(sortedItems.slice(0, 5));
+        setAllItems(sortedItems);
+      }
+      catch (error) {
         console.log(error);
-      });
+      }
+      finally {
+        setRSSLoading(false);
+      }
+    };
+
+    Promise.all([fetchRssFeeds(), fetchAlarm()]);
   }, []);
+
+  const parseXml = (response, filter = false) => {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(response, 'application/xml');
+    let items = Array.from(xmlDoc.querySelectorAll('item'));
+    const filteredItems = items.filter(item => {
+      const title = item.querySelector('title').textContent;
+      return (
+        !filter ||
+        title.includes('Copernicus Sentinel-2A/B') ||
+        title.includes('Copernicus Sentinel-2B') ||
+        title.includes('Copernicus Sentinel-2A')
+      );
+    });
+  
+    return filteredItems.map(item => ({
+      title: item.querySelector('title').textContent,
+      link: item.querySelector('link').textContent,
+      description: item.querySelector('description').textContent,
+      pubDate: item.querySelector('pubDate').textContent,
+      guid: item.querySelector('guid').textContent,
+    }));
+  }
 
   const formatDate = timestamp => {
     const date = new Date(timestamp);
@@ -86,7 +119,7 @@ function StatusPage() {
           ) : (
             <div>
               {alarms.map((alarm, index) => (
-                <div  key={index} className={`status-main ${alarm.state === 'OK' ? 'ok-status' : 'danger-status'}`}>
+                <div key={index} className={`status-main ${alarm.state === 'OK' ? 'ok-status' : 'danger-status'}`}>
                   <div className="status-container" key={index}>
                     <div className="status-item" >
                       <h3 className="status-title">
