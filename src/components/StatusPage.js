@@ -66,14 +66,11 @@ function StatusPage() {
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(response, 'application/xml');
     let items = Array.from(xmlDoc.querySelectorAll('item'));
+    const excludedRegex = /Sentinel-3[a-zA-Z]?|Sentinel-1[a-zA-Z]?/;
     const filteredItems = items.filter(item => {
       const title = item.querySelector('title').textContent;
-      return (
-        !filter ||
-        title.includes('Copernicus Sentinel-2A/B') ||
-        title.includes('Copernicus Sentinel-2B') ||
-        title.includes('Copernicus Sentinel-2A')
-      );
+      const shouldFilter = !excludedRegex.test(title);
+      return filter ? shouldFilter : true;
     });
   
     return filteredItems.map(item => ({
