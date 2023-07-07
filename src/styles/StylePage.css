@@ -50,6 +50,10 @@
   background-color: #f7e0e0;
 }
 
+.alert-status {
+  background-color: #ffedb5;
+}
+
 .status-title {
   font-size: 24px;
 }
@@ -63,6 +67,12 @@
 .danger-icon {
   font-size: 32px;
   color: red;
+  margin-right: 10px;
+}
+
+.alert-icon {
+  font-size: 32px;
+  color: #ffb902;  
   margin-right: 10px;
 }
 

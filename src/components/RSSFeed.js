@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { BeatLoader } from 'react-spinners';
 import ReactPaginate from 'react-paginate';
 import '../styles/RSSFeed.css';
-import { RSS_FEED_URL } from '../config';
+import { INTHUB_RSS_FEED_URL } from '../utilities/config';
 
 
 function RssFeedPage() {
@@ -27,7 +27,7 @@ function RssFeedPage() {
         }
         else {
 
-            fetch(RSS_FEED_URL)
+            fetch(INTHUB_RSS_FEED_URL)
                 .then(response => response.text())
                 .then(data => {
 

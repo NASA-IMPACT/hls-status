@@ -2,134 +2,88 @@ import React, { useState, useEffect } from 'react';
 import '../styles/StylePage.css';
 import { BeatLoader } from 'react-spinners';
 import { Link } from 'react-router-dom';
+import Alarm from '../components/Alarm';
 import Metric from '../components/Metric';
-import { ALARM_URL, RSS_FEED_URL } from '../config';
+import { ALARM_URL, INTHUB_RSS_FEED_URL, USGS_RSS_FEED_URL, HLS_TITLE } from '../utilities/config';
+import formatDate from '../utilities/date';
+
 
 
 function StatusPage() {
   const [alarms, setAlarms] = useState([]);
-  const [showDetails, setShowDetails] = useState(false);
   const [selectedAlarm, setSelectedAlarm] = useState(null);
   const [feedItems, setFeedItems] = useState([]);
   const [allItems, setAllItems] = useState([]);
-  // const RSS_FEED_URL = 'https://www.usgs.gov/science-support/322/news/feed';
   const [loading, setLoading] = useState(true);
   const [rssLoading, setRSSLoading] = useState(true);
-
-  let alarm = [
-    {
-      "alarm_name": "L30 Produced 24 hours",
-      "state": "OK",
-      "state_transitioned_timestamp": "2023-03-07 17:47:34.524000+00:00",
-      "state_updated_timestamp": "2023-03-07 17:47:34.524000+00:00",
-      "alarm_history_items": []
-    },
-    {
-      "alarm_name": "S30 Produced 24 hours",
-      "state": "OK",
-      "state_transitioned_timestamp": "2023-04-14 02:38:25.405000+00:00",
-      "state_updated_timestamp": "2023-04-14 02:38:25.405000+00:00",
-      "alarm_history_items": {
-        "version": "1.0",
-        "oldState": {
-          "stateValue": "ALARM",
-          "stateReason": "Threshold Crossed: 1 out of the last 1 datapoints [6986.0 (10/04/23 07:24:00)] was less than the threshold (7000.0) (minimum 1 datapoint for OK -> ALARM transition).",
-          "stateReasonData": {
-            "version": "1.0",
-            "queryDate": "2023-04-11T07:24:25.428+0000",
-            "startDate": "2023-04-10T07:24:00.000+0000",
-            "statistic": "Sum",
-            "period": 86400,
-            "recentDatapoints": [
-              6986.0
-            ],
-            "threshold": 7000.0,
-            "evaluatedDatapoints": [
-              {
-                "timestamp": "2023-04-10T07:24:00.000+0000",
-                "sampleCount": 18777.0,
-                "value": 6986.0
-              }
-            ]
-          }
-        },
-        "newState": {
-          "stateValue": "OK",
-          "stateReason": "Threshold Crossed: 1 out of the last 1 datapoints [7007.0 (10/04/23 14:42:00)] was not less than the threshold (7000.0) (minimum 1 datapoint for ALARM -> OK transition).",
-          "stateReasonData": {
-            "version": "1.0",
-            "queryDate": "2023-04-11T14:42:25.397+0000",
-            "startDate": "2023-04-10T14:42:00.000+0000",
-            "statistic": "Sum",
-            "period": 86400,
-            "recentDatapoints": [
-              7007.0
-            ],
-            "threshold": 7000.0,
-            "evaluatedDatapoints": [
-              {
-                "timestamp": "2023-04-10T14:42:00.000+0000",
-                "sampleCount": 16412.0,
-                "value": 7007.0
-              }
-            ]
-          }
-        }
-      }
-    }
-  ]
 
   useEffect(() => {
 
     setLoading(true);
     setRSSLoading(true);
-    fetch(ALARM_URL)
-      .then(response => response.json())
-      .then(data => {
-        setLoading(false);
-        let content = JSON.parse(data.body);
-        setAlarms(content);
-      })
-      .catch(error => console.error(error));
 
+    const fetchAlarm = () => {
+      fetch(ALARM_URL)
+        .then(response => response.json())
+        .then(data => {
+          let content = JSON.parse(data.body);
+          setAlarms(content);
+        })
+        .catch(error => console.error(error))
+        .finally(() => setLoading(false));
+    };
 
-    fetch(RSS_FEED_URL)
-      .then(response => response.text())
-      .then(data => {
-        const parser = new DOMParser();
-        const xml = parser.parseFromString(data, 'application/xml');
-        let items = Array.from(xml.querySelectorAll('item'));
+    const fetchRssFeeds = async () => {
+      try {
+        const [inthubResponse, usgsResponse] = await Promise.all([
+          fetch(INTHUB_RSS_FEED_URL),
+          fetch(USGS_RSS_FEED_URL)
+        ]);
 
-        const allItems = items.map(item => ({
-          title: item.querySelector('title').textContent,
-          link: item.querySelector('link').textContent,
-          description: item.querySelector('description').textContent,
-          pubDate: item.querySelector('pubDate').textContent,
-          guid: item.querySelector('guid').textContent,
-        }));
-        setRSSLoading(false);
-        setFeedItems(allItems.slice(0, 5));
-        setAllItems(allItems);
-      })
-      .catch(error => {
+        const [inthubXml, usgsXml] = await Promise.all([
+          inthubResponse.text(),
+          usgsResponse.text()
+        ]);
+
+        const inthubAllItems = parseXml(inthubXml, true);
+        let contentBody = JSON.parse(usgsXml).body;
+        const usgsAllItems = parseXml(contentBody, false);
+
+        const mergedItems = [...inthubAllItems, ...usgsAllItems];
+        const sortedItems = mergedItems.sort((a, b) => new Date(b.pubDate) - new Date(a.pubDate));
+        setFeedItems(sortedItems.slice(0, 5));
+        setAllItems(sortedItems);
+      }
+      catch (error) {
         console.log(error);
-      });
+      }
+      finally {
+        setRSSLoading(false);
+      }
+    };
+
+    Promise.all([fetchRssFeeds(), fetchAlarm()]);
   }, []);
 
-  const formatDate = timestamp => {
-    const date = new Date(timestamp);
-    const options = { timeZone: 'UTC', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-    const formattedDate = date.toLocaleString('en-US', options);
-    const timezone = 'UTC'; // Specify the timezone here
-
-    return `${formattedDate} (${timezone})`;
-  };
-
-  const toggleDetails = (index) => {
-    setSelectedAlarm(alarms[index].alarm_history_items);
-    // console.log(selectedAlarm);
-    setShowDetails(!showDetails);
-  };
+  const parseXml = (response, filter = false) => {
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(response, 'application/xml');
+    let items = Array.from(xmlDoc.querySelectorAll('item'));
+    const excludedRegex = /Sentinel-3[a-zA-Z]?|Sentinel-1[a-zA-Z]?/;
+    const filteredItems = items.filter(item => {
+      const title = item.querySelector('title').textContent;
+      const shouldFilter = !excludedRegex.test(title);
+      return filter ? shouldFilter : true;
+    });
+  
+    return filteredItems.map(item => ({
+      title: item.querySelector('title').textContent,
+      link: item.querySelector('link').textContent,
+      description: item.querySelector('description').textContent,
+      pubDate: item.querySelector('pubDate').textContent,
+      guid: item.querySelector('guid').textContent,
+    }));
+  }
 
   const handleAlarmClick = alarm => {
     if (selectedAlarm === alarm) {
@@ -143,7 +97,7 @@ function StatusPage() {
   return (
     <div>
       <div className="welcome-container">
-        <h1 className="welcome-content">Welcome to Harmonized Landsat and Sentinel-2 Status Page</h1>
+        <h1 className="welcome-content">Welcome to {HLS_TITLE} Status Page</h1>
       </div>
 
       <div className="main-container">
@@ -156,7 +110,7 @@ function StatusPage() {
           ) : (
             <div>
               {alarms.map((alarm, index) => (
-                <div  key={index} className={`status-main ${alarm.state === 'OK' ? 'ok-status' : 'danger-status'}`}>
+                <div key={index} className={`status-main ${alarm.status === 'OK' ? 'ok-status' : alarm.status === 'DANGER' ? 'danger-status' : 'alert-status'}`}>
                   <div className="status-container" key={index}>
                     <div className="status-item" >
                       <h3 className="status-title">
@@ -167,17 +121,20 @@ function StatusPage() {
                       </div>
                     </div>
                     <div className="status-icon">
-                      {alarm.state === 'OK' ? (
+                      {alarm.status === 'OK' ? (
                         <i className="fas fa-check-circle ok-icon"></i>
-                      ) : (
+                      ) : alarm.status === 'DANGER' ? (
                         <i className="fas fa-exclamation-triangle danger-icon"></i>
-                      )}
+                      ) : alarm.status === 'ALERT' ? (
+                        <i className="fas fa-exclamation-circle alert-icon"></i>
+                      ) : null}
                     </div>
                   </div>
                   <h4 className="status-header" onClick={() => handleAlarmClick(alarm)}>Details
                     <i style={{ marginLeft: "8px" }} className={selectedAlarm === alarm ? 'fas fa-angle-up' : 'fas fa-angle-down'}></i></h4>
                   {selectedAlarm === alarm && (
                     <div className="status-history">
+                      <Alarm alarm={alarm.alarms} />
                       <Metric alarm={alarm} />
                       <h4><Link to='/metrics' state={{ alarm }} className="title-link">View More Details
                         <i style={{ marginLeft: "8px" }} className='fas fa-angle-right'></i></Link></h4>

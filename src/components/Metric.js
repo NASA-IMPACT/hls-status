@@ -4,8 +4,8 @@ import { BeatLoader } from 'react-spinners';
 import { useLocation } from 'react-router-dom';
 import { Chart, ArcElement, Legend, Tooltip } from 'chart.js'
 import { Doughnut } from 'react-chartjs-2';
-import { METRIC_URL } from '../config';
-
+import { METRIC_URL } from '../utilities/config';
+import formatDate from '../utilities/date';
 
 Chart.register(ArcElement, Legend, Tooltip);
 
@@ -83,15 +83,6 @@ const Metric = (props) => {
                 backgroundColor: labels.map((label) => labelColors[label] || '#1f77b4'),
             },
         ],
-    };
-
-    const formatDate = timestamp => {
-        const date = new Date(timestamp);
-        const options = { timeZone: 'UTC', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-        const formattedDate = date.toLocaleString('en-US', options);
-        const timezone = 'UTC'; // Specify the timezone here
-
-        return `${formattedDate} (${timezone})`;
     };
 
     return (
