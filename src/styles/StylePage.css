@@ -66,6 +66,12 @@
   margin-right: 10px;
 }
 
+.alert-icon {
+  font-size: 32px;
+  color: gray;  
+  margin-right: 10px;
+}
+
 .status-container {
   display: flex;
   align-items: center;

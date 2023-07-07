@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import '../styles/StylePage.css';
 import { BeatLoader } from 'react-spinners';
 import { Link } from 'react-router-dom';
+import Alarm from '../components/Alarm';
 import Metric from '../components/Metric';
 import { ALARM_URL, INTHUB_RSS_FEED_URL, USGS_RSS_FEED_URL, HLS_TITLE } from '../utilities/config';
+import formatDate from '../utilities/date';
+
 
 
 function StatusPage() {
@@ -82,15 +85,6 @@ function StatusPage() {
     }));
   }
 
-  const formatDate = timestamp => {
-    const date = new Date(timestamp);
-    const options = { timeZone: 'UTC', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' };
-    const formattedDate = date.toLocaleString('en-US', options);
-    const timezone = 'UTC'; // Specify the timezone here
-
-    return `${formattedDate} (${timezone})`;
-  };
-
   const handleAlarmClick = alarm => {
     if (selectedAlarm === alarm) {
       setSelectedAlarm(null); // deselect the alarm if already selected
@@ -127,7 +121,7 @@ function StatusPage() {
                       </div>
                     </div>
                     <div className="status-icon">
-                      {alarm.state === 'OK' ? (
+                      {alarm.status === 'OK' ? (
                         <i className="fas fa-check-circle ok-icon"></i>
                       ) : (
                         <i className="fas fa-exclamation-triangle danger-icon"></i>
@@ -138,7 +132,8 @@ function StatusPage() {
                     <i style={{ marginLeft: "8px" }} className={selectedAlarm === alarm ? 'fas fa-angle-up' : 'fas fa-angle-down'}></i></h4>
                   {selectedAlarm === alarm && (
                     <div className="status-history">
-                      <Metric alarm={alarm} />
+                      <Alarm alarm={alarm.alarms} />
+                      <Metric alarm={alarm}/>
                       <h4><Link to='/metrics' state={{ alarm }} className="title-link">View More Details
                         <i style={{ marginLeft: "8px" }} className='fas fa-angle-right'></i></Link></h4>
                     </div>
