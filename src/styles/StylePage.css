@@ -142,7 +142,7 @@
 }
 
 .feed-item-title {
-  font-size: 18px;
+  font-size: 15px;
   font-weight: bold;
   margin: 5px;
 }
@@ -187,4 +187,28 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+.status-green {
+  color: #2ecc71;
+  font-weight: bold;
+}
+
+.status-yellow {
+  color: #f1c40f;
+  font-weight: bold;
+}
+
+.status-red {
+  color: #e74c3c;
+  font-weight: bold;
 }

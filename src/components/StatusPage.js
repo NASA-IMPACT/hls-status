@@ -4,7 +4,7 @@ import { BeatLoader } from 'react-spinners';
 import { Link } from 'react-router-dom';
 import Alarm from '../components/Alarm';
 import Metric from '../components/Metric';
-import { ALARM_URL, INTHUB_RSS_FEED_URL, USGS_RSS_FEED_URL, HLS_TITLE } from '../utilities/config';
+import { ALARM_URL, INTHUB_RSS_FEED_URL, USGS_RSS_FEED_URL } from '../utilities/config';
 import formatDate from '../utilities/date';
 
 
@@ -75,7 +75,7 @@ function StatusPage() {
       const shouldFilter = !excludedRegex.test(title);
       return filter ? shouldFilter : true;
     });
-  
+
     return filteredItems.map(item => ({
       title: item.querySelector('title').textContent,
       link: item.querySelector('link').textContent,
@@ -97,7 +97,13 @@ function StatusPage() {
   return (
     <div>
       <div className="welcome-container">
-        <h1 className="welcome-content">Welcome to {HLS_TITLE} Status Page</h1>
+        <h1 className="welcome-content">Welcome to HLS processing status page.</h1>
+        <p>This page pulls limited metrics from the cloud processing and provides 1 of 3 statuses:</p>
+        <ul>
+          <li><span className="status-green">Green:</span> Processing is proceeding nominally, no negative indicators.</li>
+          <li><span className="status-yellow">Yellow:</span> Processing is ongoing. The number of errors or granules output are outside the expected range. This may be an early indicator of an issue, but is usually resolved automatically.</li>
+          <li><span className="status-red">Red:</span> HLS Data is not being produced.</li>
+        </ul>
       </div>
 
       <div className="main-container">
