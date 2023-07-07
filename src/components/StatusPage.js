@@ -110,7 +110,7 @@ function StatusPage() {
           ) : (
             <div>
               {alarms.map((alarm, index) => (
-                <div key={index} className={`status-main ${alarm.state === 'OK' ? 'ok-status' : 'danger-status'}`}>
+                <div key={index} className={`status-main ${alarm.status === 'OK' ? 'ok-status' : alarm.status === 'DANGER' ? 'danger-status' : 'alert-status'}`}>
                   <div className="status-container" key={index}>
                     <div className="status-item" >
                       <h3 className="status-title">
@@ -123,9 +123,11 @@ function StatusPage() {
                     <div className="status-icon">
                       {alarm.status === 'OK' ? (
                         <i className="fas fa-check-circle ok-icon"></i>
-                      ) : (
+                      ) : alarm.status === 'DANGER' ? (
                         <i className="fas fa-exclamation-triangle danger-icon"></i>
-                      )}
+                      ) : alarm.status === 'ALERT' ? (
+                        <i className="fas fa-exclamation-circle alert-icon"></i>
+                      ) : null}
                     </div>
                   </div>
                   <h4 className="status-header" onClick={() => handleAlarmClick(alarm)}>Details
@@ -133,7 +135,7 @@ function StatusPage() {
                   {selectedAlarm === alarm && (
                     <div className="status-history">
                       <Alarm alarm={alarm.alarms} />
-                      <Metric alarm={alarm}/>
+                      <Metric alarm={alarm} />
                       <h4><Link to='/metrics' state={{ alarm }} className="title-link">View More Details
                         <i style={{ marginLeft: "8px" }} className='fas fa-angle-right'></i></Link></h4>
                     </div>

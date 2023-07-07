@@ -18,7 +18,7 @@ function Alarm({ alarm }) {
               ) : alarm[alarmKey].state === 'ALARM' ? (
                 <i className="fas fa-exclamation-triangle danger-icon"></i>
               ) : alarm[alarmKey].state === 'INSUFFICIENT_DATA' ? (
-                <i className="fas fa-solid fa-exclamation alert-icon"></i>
+                <i className="fas fa-solid fa-exclamation-circle alert-icon"></i>
               ) : null}
             </div>
             <div className="alarm-details">
