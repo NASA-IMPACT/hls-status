@@ -62,18 +62,21 @@
   font-size: 32px;
   color: green;
   margin-right: 10px;
+  transition: transform 0.3s ease;
 }
 
 .danger-icon {
   font-size: 32px;
   color: red;
   margin-right: 10px;
+  transition: transform 0.3s ease;
 }
 
 .alert-icon {
   font-size: 32px;
   color: #ffb902;  
   margin-right: 10px;
+  transition: transform 0.3s ease;
 }
 
 .status-container {
@@ -142,13 +145,13 @@
 }
 
 .feed-item-title {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   margin: 5px;
 }
 
 .feed-item-description {
-  font-size: 16px;
+  font-size: 12px;
   margin: 5px;
 }
 
@@ -187,4 +190,42 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+.status-green {
+  color: #2ecc71;
+  font-weight: bold;
+}
+
+.status-yellow {
+  color: #f1c40f;
+  font-weight: bold;
+}
+
+.status-red {
+  color: #e74c3c;
+  font-weight: bold;
+}
+/* .ok-icon,
+.danger-icon,
+.alert-icon {
+  font-size: 32px;
+  color: green;
+  margin-right: 10px;
+  transition: transform 0.3s ease;
+} */
+
+.ok-icon:hover,
+.danger-icon:hover,
+.alert-icon:hover {
+  transform: scale(1.2);
 }
