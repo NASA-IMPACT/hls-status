@@ -118,6 +118,7 @@ function StatusPage() {
               {alarms.map((alarm, index) => (
                 <div key={index} className={`status-main ${alarm.status === 'OK' ? 'ok-status' : alarm.status === 'DANGER' ? 'danger-status' : 'alert-status'}`}>
                   <div className="status-container" key={index}>
+                    <p>{alarm.status}</p>
                     <div className="status-item" >
                       <h3 className="status-title">
                         {alarm.alarm_name}
