@@ -108,7 +108,7 @@ function StatusPage() {
 
       <div className="main-container">
         <div className="title-container">
-          <h1 className="title-content">HLS Status Past 24 hours</h1>
+          <h1 className="title-content">HLS Status Past 24 hour</h1>
           {loading ? (
             <div className="loader-container">
               <BeatLoader color="#36D7B7" loading={loading} />
