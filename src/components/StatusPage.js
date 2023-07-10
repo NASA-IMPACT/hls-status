@@ -118,7 +118,6 @@ function StatusPage() {
               {alarms.map((alarm, index) => (
                 <div key={index} className={`status-main ${alarm.status === 'OK' ? 'ok-status' : alarm.status === 'DANGER' ? 'danger-status' : 'alert-status'}`}>
                   <div className="status-container" key={index}>
-                    <p>{alarm.status}</p>
                     <div className="status-item" >
                       <h3 className="status-title">
                         {alarm.alarm_name}
@@ -127,7 +126,7 @@ function StatusPage() {
                         <div className="updated-timestamp">Last Updated on {formatDate(alarm.state_updated_timestamp)}</div>
                       </div>
                     </div>
-                    <div className="status-icon">
+                    <div className="status-icon" title={alarm.status}>
                       {alarm.status === 'OK' ? (
                         <i className="fas fa-check-circle ok-icon"></i>
                       ) : alarm.status === 'DANGER' ? (
