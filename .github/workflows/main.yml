@@ -3,7 +3,7 @@ name: main-build-and-deploy
 on:
   push:
     branches:
-      - dev
+      - main
     paths:
       - frontend/**
 
