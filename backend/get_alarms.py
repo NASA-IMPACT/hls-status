@@ -1,7 +1,5 @@
 import json
 import boto3
-from datetime import datetime, timedelta
-import os
 
 def lambda_handler(event, context):
     cloudwatch = boto3.client('cloudwatch', region_name='us-west-2')
