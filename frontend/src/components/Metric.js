@@ -20,7 +20,7 @@ const Metric = (props) => {
     const isFromLink = location.state
 
     const alarm = isFromLink ? location.state.alarm : props.alarm;
-    const isL30Alarm = alarm.alarm_name === 'L30 Produced 24 hours';
+    const isL30Alarm = alarm.alarm_name === 'L30 Status';
     const granulesTitle = isL30Alarm ? 'L30 Granules Produced' : 'S30 Granules Produced';
     const chartTitle = isL30Alarm ? 'L30 Status' : 'S30 Status';
 
