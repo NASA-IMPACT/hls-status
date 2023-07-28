@@ -4,6 +4,7 @@ import { BeatLoader } from 'react-spinners';
 import { Link } from 'react-router-dom';
 import Alarm from '../components/Alarm';
 import Metric from '../components/Metric';
+import Contact from '../components/Contact';
 import { ALARM_URL, INTHUB_RSS_FEED_URL, USGS_RSS_FEED_URL } from '../utilities/config';
 import formatDate from '../utilities/date';
 
@@ -188,6 +189,7 @@ function StatusPage() {
 
         </div>
       </div>
+      <Contact />
     </div>
   );
 }
