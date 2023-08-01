@@ -74,7 +74,7 @@
 
 .alert-icon {
   font-size: 32px;
-  color: #ffb902;  
+  color: #ffb902;
   margin-right: 10px;
   transition: transform 0.3s ease;
 }
@@ -98,7 +98,6 @@
   cursor: pointer;
   text-decoration: underline;
   color: #2276ad;
-  ;
 }
 
 .status-header:hover {
@@ -215,6 +214,7 @@ li {
   color: #e74c3c;
   font-weight: bold;
 }
+
 /* .ok-icon,
 .danger-icon,
 .alert-icon {

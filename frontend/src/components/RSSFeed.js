@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { BeatLoader } from 'react-spinners';
 import ReactPaginate from 'react-paginate';
-import '../styles/RSSFeed.css';
 import { INTHUB_RSS_FEED_URL } from '../utilities/config';
+import '../styles/RSSFeed.css';
 
 
 function RssFeedPage() {

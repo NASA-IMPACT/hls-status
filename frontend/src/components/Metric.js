@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import '../styles/Metric.css';
+import { useEffect, useState } from 'react';
 import { BeatLoader } from 'react-spinners';
 import { useLocation } from 'react-router-dom';
 import { Chart, ArcElement, Legend, Tooltip } from 'chart.js'
 import { Doughnut } from 'react-chartjs-2';
 import { METRIC_URL } from '../utilities/config';
 import formatDate from '../utilities/date';
+import '../styles/Metric.css';
 
 Chart.register(ArcElement, Legend, Tooltip);
 
-
-const Metric = (props) => {
+function Metric(props) {
     const [metricData, setMetricData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
@@ -20,7 +19,7 @@ const Metric = (props) => {
     const isFromLink = location.state
 
     const alarm = isFromLink ? location.state.alarm : props.alarm;
-    const isL30Alarm = alarm.alarm_name === 'L30 Produced 24 hours';
+    const isL30Alarm = alarm.alarm_name === 'L30 Status';
     const granulesTitle = isL30Alarm ? 'L30 Granules Produced' : 'S30 Granules Produced';
     const chartTitle = isL30Alarm ? 'L30 Status' : 'S30 Status';
 
@@ -160,6 +159,6 @@ const Metric = (props) => {
             )}
         </div>
     );
-};
+}
 
 export default Metric;

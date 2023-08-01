@@ -1,9 +1,7 @@
-import React from 'react';
 import formatDate from '../utilities/date';
 import '../styles/Alarm.css';
 
 function Alarm({ alarm }) {
-
 
   return (
     <div className="alarm-container">
@@ -15,7 +13,7 @@ function Alarm({ alarm }) {
               <div className="alarm-timestamp">{formatDate(alarm[alarmKey].state_updated_timestamp)}</div>
             </div>
           </div>
-          <div className="status-icon" title={alarm[alarmKey].state}> 
+          <div className="status-icon" title={alarm[alarmKey].state}>
             {alarm[alarmKey].state === 'OK' ? (
               <i className="fas fa-check-circle ok-icon"></i>
             ) : alarm[alarmKey].state === 'ALARM' ? (
