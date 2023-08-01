@@ -9,7 +9,7 @@ import '../styles/Metric.css';
 
 Chart.register(ArcElement, Legend, Tooltip);
 
-const Metric = (props) => {
+function Metric(props) {
     const [metricData, setMetricData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
@@ -159,6 +159,6 @@ const Metric = (props) => {
             )}
         </div>
     );
-};
+}
 
 export default Metric;

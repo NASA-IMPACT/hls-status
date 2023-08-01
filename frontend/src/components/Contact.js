@@ -1,6 +1,6 @@
 import '../styles/Contact.css';
 
-const ContactSection = () => {
+function ContactSection() {
 
   return (
     <section className="contact-section">
@@ -27,6 +27,6 @@ const ContactSection = () => {
 
     </section>
   );
-};
+}
 
 export default ContactSection;
