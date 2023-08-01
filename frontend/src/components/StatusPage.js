@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import '../styles/StylePage.css';
 import { BeatLoader } from 'react-spinners';
 import { Link } from 'react-router-dom';

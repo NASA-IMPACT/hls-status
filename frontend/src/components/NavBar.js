@@ -1,4 +1,3 @@
-import React from 'react';
 import '../styles/NavBar.css'
 import {HLS_TITLE} from '../utilities/config';
 

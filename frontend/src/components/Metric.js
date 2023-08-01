@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import '../styles/Metric.css';
 import { BeatLoader } from 'react-spinners';
 import { useLocation } from 'react-router-dom';
