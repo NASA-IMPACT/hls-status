@@ -1,32 +1,29 @@
-/* ContactSection.css */
-
 .contact-section {
-    background-color: #2276ac;
-    color: #fff;
-    padding: 20px;
-    border: 1px solid #e0e0e0;
-    border-radius: 5px;
-  }
-  
-  .contact-info {
-    display: flex;
-    align-items: center;
-  }
-  
-  .contact-details {
-    margin-left: 80px;
-  }
+  background-color: #2276ac;
+  color: #fff;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+}
 
-  .contact-details a{
-    color: #fff;
-  }
+.contact-info {
+  display: flex;
+  align-items: center;
+}
 
-  .contact-details i{
-    margin-right: 10px;
-  }
+.contact-details {
+  margin-left: 80px;
+}
 
-  .contact-logo img {
-    height: 100px;
-    /* width: 50px; */
-    margin: 10px;
-  }
+.contact-details a {
+  color: #fff;
+}
+
+.contact-details i {
+  margin-right: 10px;
+}
+
+.contact-logo img {
+  height: 100px;
+  margin: 10px;
+}

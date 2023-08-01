@@ -9,7 +9,6 @@ import '../styles/Metric.css';
 
 Chart.register(ArcElement, Legend, Tooltip);
 
-
 const Metric = (props) => {
     const [metricData, setMetricData] = useState([]);
     const [loading, setLoading] = useState(true);

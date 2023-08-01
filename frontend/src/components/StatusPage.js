@@ -9,7 +9,6 @@ import formatDate from '../utilities/date';
 import '../styles/StylePage.css';
 
 
-
 function StatusPage() {
   const [alarms, setAlarms] = useState([]);
   const [selectedAlarm, setSelectedAlarm] = useState(null);
