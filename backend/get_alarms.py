@@ -1,22 +1,27 @@
 import json
 import boto3
+import os
 
 def lambda_handler(event, context):
-    cloudwatch = boto3.client('cloudwatch', region_name='us-west-2')
-    alarm_names = ['S30 Produced 24 hours',
-                'L30 Produced 24 hours',
-                'hls-production-v2-LandsatStepFunctionAlarmLandsatCWStepFunctionAlarm277F1921-IR80N4G3HDG2',
-                'hls-production-v2-SentinelStepFunctionAlarmSentinelCWStepFunctionAlarmBA29C2FB-1FMHFYYGWD7MX',
-                'No new LAADS']
+    cloudwatch = boto3.client('cloudwatch', region_name=os.getenv('region_name'))
+    
+    # Initialize alarms
+    l30_alarm_name = os.getenv('l30_alarm')
+    s30_alarm_name = os.getenv('s30_alarm')
+    no_new_laads_alarm_name = os.getenv('no_new_laads_alarm')
+    landsat_alarm_name = os.getenv('landsat_alarm')
+    sentinel_alarm_name = os.getenv('sentinel_alarm')
+
+    alarm_names = [l30_alarm_name, s30_alarm_name, no_new_laads_alarm_name, landsat_alarm_name, sentinel_alarm_name ]
+
     response = cloudwatch.describe_alarms(AlarmNames=alarm_names)
     alarms = response['MetricAlarms']
-    
 
-    l30_alarm = next((alarm for alarm in alarms if alarm['AlarmName'] == 'L30 Produced 24 hours'), None)
-    s30_alarm = next((alarm for alarm in alarms if alarm['AlarmName'] == 'S30 Produced 24 hours'), None)
-    no_new_laads_alarm = next((alarm for alarm in alarms if alarm['AlarmName'] == 'No new LAADS'), None)
-    landsat_alarm = next((alarm for alarm in alarms if alarm['AlarmName'] == 'hls-production-v2-LandsatStepFunctionAlarmLandsatCWStepFunctionAlarm277F1921-IR80N4G3HDG2'), None)
-    sentinel_alarm = next((alarm for alarm in alarms if alarm['AlarmName'] == 'hls-production-v2-SentinelStepFunctionAlarmSentinelCWStepFunctionAlarmBA29C2FB-1FMHFYYGWD7MX'), None)
+    l30_alarm = next((alarm for alarm in alarms if alarm['AlarmName'] == l30_alarm_name), None)
+    s30_alarm = next((alarm for alarm in alarms if alarm['AlarmName'] == s30_alarm_name), None)
+    no_new_laads_alarm = next((alarm for alarm in alarms if alarm['AlarmName'] == no_new_laads_alarm_name), None)
+    landsat_alarm = next((alarm for alarm in alarms if alarm['AlarmName'] == landsat_alarm_name), None)
+    sentinel_alarm = next((alarm for alarm in alarms if alarm['AlarmName'] == sentinel_alarm_name), None)
 
     l30_status = "OK"
     s30_status = "OK"
@@ -46,17 +51,17 @@ def lambda_handler(event, context):
 
     alarms_res = []
     l30_alarms_res = {
-        'L30 Produced 24 hours': {
+        'Produced Granules w/in Expected Ranged': {
             'state': l30_alarm['StateValue'],
             'state_transitioned_timestamp': l30_alarm['StateTransitionedTimestamp'],
             'state_updated_timestamp': l30_alarm['StateUpdatedTimestamp'],
         },
-        'No new LAADS': {
+        'Atmospheric Parameters Received': {
             'state': no_new_laads_alarm['StateValue'],
             'state_transitioned_timestamp': no_new_laads_alarm['StateTransitionedTimestamp'],
             'state_updated_timestamp': no_new_laads_alarm['StateUpdatedTimestamp']
         },
-        'Landsat': {
+        'Nominal % Processing Errors': {
             'state': landsat_alarm['StateValue'],
             'state_transitioned_timestamp': landsat_alarm['StateTransitionedTimestamp'],
             'state_updated_timestamp': landsat_alarm['StateUpdatedTimestamp']
@@ -64,17 +69,17 @@ def lambda_handler(event, context):
     }
 
     s30_alarms_res = {
-        'S30 Produced 24 hours': {
+        'Produced Granules w/in Expected Ranged': {
             'state': s30_alarm['StateValue'],
             'state_transitioned_timestamp': s30_alarm['StateTransitionedTimestamp'],
             'state_updated_timestamp': s30_alarm['StateUpdatedTimestamp'],
         },
-        'No new LAADS': {
+        'Atmospheric Parameters Received': {
             'state': no_new_laads_alarm['StateValue'],
             'state_transitioned_timestamp': no_new_laads_alarm['StateTransitionedTimestamp'],
             'state_updated_timestamp': no_new_laads_alarm['StateUpdatedTimestamp']
         },
-        'Sentinel': {
+        'Nominal % Processing Errors': {
             'state': sentinel_alarm['StateValue'],
             'state_transitioned_timestamp': sentinel_alarm['StateTransitionedTimestamp'],
             'state_updated_timestamp': sentinel_alarm['StateUpdatedTimestamp']
