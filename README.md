@@ -1,6 +1,6 @@
 # HLS Status Page
 
-Webpage to keep display metrics from the cloud processing and provide status based on the metrics.
+Webpage to display metrics from the cloud processing and provide status based on the metrics.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 # Basic Commands
