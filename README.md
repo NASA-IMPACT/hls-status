@@ -105,8 +105,9 @@ curl  'https://6af2xo7p46.execute-api.us-east-2.amazonaws.com/dev/rss/'
 | 404 - Not Found | The requested resource doesn't exist. |
 | 500 - Server Error | Something went wrong on the HLS server end. |
 
+# React Fronend
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-# Basic Commands
+## Basic Commands
 
 ## Available Scripts
 
