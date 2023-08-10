@@ -1,4 +1,5 @@
 import urllib.request
+import os
 
 def lambda_handler(event, context):
     # Retrieve the RSS feed URL from the event
@@ -6,7 +7,7 @@ def lambda_handler(event, context):
     
     # Fetch the XML RSS feed
     try:
-        response = urllib.request.urlopen('https://www.usgs.gov/science-support/322/news/feed')
+        response = urllib.request.urlopen(os.getenv("rss_url"))
         rss_xml = response.read().decode('utf-8')
         rss_xml = rss_xml.lstrip('\ufeff')
         
