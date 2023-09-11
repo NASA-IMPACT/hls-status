@@ -22,7 +22,6 @@ def error_status_determination(value, thresholds):
 def lambda_handler(event, context):
     cloudwatch = boto3.client('cloudwatch', region_name=os.getenv("region_name"))
     period = 24
-    metric = 's30'
     
     s30_state_machine_arn = os.getenv("s30_state_machine_arn", "")
     l30_state_machine_arn = os.getenv("l30_state_machine_arn", "")
@@ -140,6 +139,6 @@ def lambda_handler(event, context):
     ]
     
     return {
-        'statusCode': 200,
+        'status_code': 200,
         'body': json.dumps(alarms_res, default=str)
     }
