@@ -39,13 +39,13 @@ jobs:
         aws lambda update-function-code --function-name get_alarm_metrics --zip-file fileb://get_alarm_metrics.zip
         cd ..
         
-        cd backend/get_metrics
+        cd get_metrics
         echo "Deploying get_metrics..."
         zip -r get_metrics.zip lambda_function.py
         aws lambda update-function-code --function-name get_metrics --zip-file fileb://get_metrics.zip
         cd ..
         
-        cd backend/get_rss
+        cd /get_rss
         echo "Deploying get_rss..."
         zip -r get_rss.zip lambda_function.py
         aws lambda update-function-code --function-name get_rss --zip-file fileb://get_rss.zip
