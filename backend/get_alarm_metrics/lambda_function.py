@@ -148,6 +148,6 @@ def lambda_handler(event, context):
     ]
     
     return {
-        'status_code': 200,
+        'status_code': 201,
         'body': json.dumps(alarms_res, default=str)
     }
