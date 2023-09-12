@@ -123,7 +123,7 @@ function StatusPage() {
                         {alarm.alarm_name}
                       </h3>
                       <div className="status-info">
-                        <div className="updated-timestamp">Last Updated on {formatDate(alarm.state_updated_timestamp)}</div>
+                        <div className="updated-timestamp">Last Updated On {formatDate(alarm.state_updated_timestamp)}</div>
                       </div>
                     </div>
                     <div className="status-icon" title={alarm.status}>
