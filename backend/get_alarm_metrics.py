@@ -22,11 +22,11 @@ def error_status_determination(value, thresholds):
 def lambda_handler(event, context):
     cloudwatch = boto3.client('cloudwatch', region_name=os.getenv('region_name'))
     period = 24
-    metric = 's30'
     
     s30_state_machine_arn = os.getenv("s30_state_machine_arn", "")
     l30_state_machine_arn = os.getenv("l30_state_machine_arn", "")
     no_new_laads_alarm_name = os.getenv("no_new_laads_alarm_name", "")
+    print("here")
     
     metric_data_query = []
     for metric_name, arn in [('ExecutionsSucceeded', s30_state_machine_arn),

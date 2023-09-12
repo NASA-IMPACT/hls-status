@@ -1,0 +1,53 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: AWS SAM template for the HLS Status Webpage's Lambda function.
+
+Resources:
+  GetAlarmMetricsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: get_alarm_metrics.lambda_handler
+      Runtime: python3.11
+      CodeUri: ./
+      MemorySize: 512
+      Timeout: 10
+      Role: arn:aws:iam::018923174646:role/test_function-role-z3a982uh
+      Environment:
+        Variables:
+          s30_state_machine_arn: ''
+          l30_state_machine_arn: ''
+          no_new_laads_alarm_name: ''
+          region_name: ''
+
+  GetMetricsFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: get_metrics.lambda_handler
+      Runtime: python3.11
+      CodeUri: ./
+      MemorySize: 512
+      Timeout: 10
+      Role: arn:aws:iam::018923174646:role/test_function-role-z3a982uh
+      Environment:
+        Variables:
+          s30_state_machine_arn: ''
+          l30_state_machine_arn: ''
+          region_name: ''
+
+
+  GetRSSFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: get_rss.lambda_handler
+      Runtime: python3.11
+      CodeUri: ./
+      MemorySize: 512
+      Timeout: 10
+      Role: arn:aws:iam::018923174646:role/test_function-role-z3a982uh
+      Environment:
+        Variables:
+          s30_state_machine_arn: ''
+          l30_state_machine_arn: ''
+          no_new_laads_alarm_name: ''
+          region_name: ''
+
