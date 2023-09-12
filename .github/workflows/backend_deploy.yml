@@ -45,7 +45,7 @@ jobs:
         aws lambda update-function-code --function-name get_metrics --zip-file fileb://get_metrics.zip
         cd ..
         
-        cd /get_rss
+        cd get_rss
         echo "Deploying get_rss..."
         zip -r get_rss.zip lambda_function.py
         aws lambda update-function-code --function-name get_rss --zip-file fileb://get_rss.zip

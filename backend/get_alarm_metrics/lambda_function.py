@@ -26,8 +26,6 @@ def lambda_handler(event, context):
     s30_state_machine_arn = os.getenv("s30_state_machine_arn", "")
     l30_state_machine_arn = os.getenv("l30_state_machine_arn", "")
     no_new_laads_alarm_name = os.getenv("no_new_laads_alarm_name", "")
-    print("here")
-    print("test 2")
     
     metric_data_query = []
     for metric_name, arn in [('ExecutionsSucceeded', s30_state_machine_arn),
