@@ -35,15 +35,15 @@ jobs:
       run: |
         cd backend/
         echo "Deploying get_alarm_metrics..."
-        zip -r get_alarm_metrics.zip backend/get_alarm_metrics.py
+        zip -r get_alarm_metrics.zip get_alarm_metrics.py
         aws lambda update-function-code --function-name get_alarm_metrics --zip-file fileb://get_alarm_metrics.zip
         
         echo "Deploying get_metrics..."
-        zip -r get_metrics.zip backend/get_metrics.py
+        zip -r get_metrics.zip get_metrics.py
         aws lambda update-function-code --function-name get_metrics --zip-file fileb://get_metrics.zip
       
         echo "Deploying get_rss..."
-        zip -r get_rss.zip backend/get_rss.py
+        zip -r get_rss.zip get_rss.py
         aws lambda update-function-code --function-name get_rss --zip-file fileb://get_rss.zip
         cd ..
         
