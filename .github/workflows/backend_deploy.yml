@@ -25,27 +25,27 @@ jobs:
         echo "Modified files: $FILES"
         echo "::set-output name=files::$FILES"
 
-        - name: Deploy modified functions
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
-        run: |
-          for FILE in ${{ steps.getfile.outputs.files }}; do
-            if [[ $FILE == "get_alarm_metrics/*" ]]; then
-              echo "Deploying get_alarm_metrics..."
-              zip -r get_alarm_metrics.zip get_alarm_metrics
-              aws lambda update-function-code --function-name GetAlarmMetricsFunction --zip-file fileb://get_alarm_metrics.zip
-            elif [[ $FILE == "get_metrics/*" ]]; then
-              echo "Deploying get_metrics..."
-              zip -r get_metrics.zip get_metrics
-              aws lambda update-function-code --function-name GetMetricsFunction --zip-file fileb://get_metrics.zip
-            elif [[ $FILE == "get_rss/*" ]]; then
-              echo "Deploying get_rss..."
-              zip -r get_rss.zip get_rss
-              aws lambda update-function-code --function-name GetRSSFunction --zip-file fileb://get_rss.zip
-            fi
-          done
+    - name: Deploy modified functions
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+      run: |
+        for FILE in ${{ steps.getfile.outputs.files }}; do
+        if [[ $FILE == "get_alarm_metrics/*" ]]; then
+            echo "Deploying get_alarm_metrics..."
+            zip -r get_alarm_metrics.zip get_alarm_metrics
+            aws lambda update-function-code --function-name GetAlarmMetricsFunction --zip-file fileb://get_alarm_metrics.zip
+        elif [[ $FILE == "get_metrics/*" ]]; then
+            echo "Deploying get_metrics..."
+            zip -r get_metrics.zip get_metrics
+            aws lambda update-function-code --function-name GetMetricsFunction --zip-file fileb://get_metrics.zip
+        elif [[ $FILE == "get_rss/*" ]]; then
+            echo "Deploying get_rss..."
+            zip -r get_rss.zip get_rss
+            aws lambda update-function-code --function-name GetRSSFunction --zip-file fileb://get_rss.zip
+        fi
+        done
  
   
   
