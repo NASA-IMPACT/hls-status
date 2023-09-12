@@ -23,7 +23,7 @@ jobs:
     - name: Identify changed files
       id: getfile
       run: |
-        FILES=$(git diff --name-only origin/dev)
+        FILES=$(git diff --name-only origin/main)
         echo "Modified files: $FILES"
         echo "::set-output name=files::$FILES"
 
