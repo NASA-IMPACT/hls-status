@@ -3,7 +3,7 @@ name: Deploy BackEnd changes to AWS Lambda
 on:
   push:
     branches:
-      - dev
+      - main
     paths:
         - backend/**
 
@@ -20,18 +20,7 @@ jobs:
       with:
         python-version: 3.11
 
-    # - name: Identify changed files
-    #   id: getfile
-    #   run: |
-    #     FILES=$(git diff --name-only origin/main)
-    #     echo "Modified files: $FILES"
-    #     echo "::set-output name=files::$FILES"
-
     - name: Deploy modified functions
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
       run: |
         cd backend/get_alarm_metrics
         echo "Deploying get_alarm_metrics..."
@@ -50,7 +39,10 @@ jobs:
         zip -r get_rss.zip lambda_function.py
         aws lambda update-function-code --function-name get_rss --zip-file fileb://get_rss.zip
         cd ..
-        
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
         
  
   
