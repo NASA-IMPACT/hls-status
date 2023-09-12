@@ -43,6 +43,11 @@
 
 .alarm-timestamp {
   color: #888;
-  margin-top: 3px;
+  /* margin-top: 3px; */
+  font-size: 14px;
+}
+
+.alarm-info {
+  margin-bottom: 5px;
   font-size: 14px;
 }

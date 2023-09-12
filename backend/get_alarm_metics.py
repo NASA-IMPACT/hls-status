@@ -5,23 +5,24 @@ import os
 
 def granules_status_determination(value, thresholds):
     if value < thresholds[0]:
-        return "DANGER"
+        return ('DANGER', f'Granules Succeeded is less than {thresholds[0]}')
     elif value < thresholds[1]:
-        return "ALERT"
+        return ('ALERT', f'Granules Succeeded is less than {thresholds[1]}')
     else:
-        return "OK"
+        return ('OK', 'OK')
         
 def error_status_determination(value, thresholds):
     if value > thresholds[0]:
-        return "DANGER"
-    elif value > thresholds[1] and value < thresholds[0]:
-        return "ALERT"
+        return ('DANGER',f'More than {thresholds[0] * 100}% Granules Failed in the past 24 hours')
+    elif value > thresholds[1]:
+        return ('ALERT', f'More than {thresholds[1] * 100}% Granules Failed in the past 24 hours')
     else:
-        return "OK"
+        return ('OK', 'OK')
         
 def lambda_handler(event, context):
-    cloudwatch = boto3.client('cloudwatch', region_name=os.getenv("region_name"))
+    cloudwatch = boto3.client('cloudwatch', region_name=os.getenv('region_name'))
     period = 24
+    metric = 's30'
     
     s30_state_machine_arn = os.getenv("s30_state_machine_arn", "")
     l30_state_machine_arn = os.getenv("l30_state_machine_arn", "")
@@ -65,16 +66,17 @@ def lambda_handler(event, context):
     )
     metric_results = response["MetricDataResults"]
 
-    s30_granulues_produced_status = granules_status_determination(metric_results[0]["Values"][0], [5000, 7000])
-    l30_granulues_produced_status = granules_status_determination(metric_results[3]["Values"][0], [5000, 7000])
+    s30_granulues_produced_status, s30_granulues_produced_info  = granules_status_determination(metric_results[0]["Values"][0], [5000, 7000])
+    l30_granulues_produced_status, l30_granulues_produced_info = granules_status_determination(metric_results[3]["Values"][0], [5000, 7000])
     
-    s30_nominal_failed_status = error_status_determination(metric_results[2]["Values"][0] / metric_results[1]["Values"][0], [0.2, 0.1])
-    l30_nominal_failed_status = error_status_determination(metric_results[5]["Values"][0] / metric_results[4]["Values"][0], [0.2, 0.1])
+    s30_nominal_failed_status, s30_nominal_failed_info = error_status_determination(metric_results[2]["Values"][0] / metric_results[1]["Values"][0], [0.2, 0.1])
+    l30_nominal_failed_status, l30_nominal_failed_info = error_status_determination(metric_results[5]["Values"][0] / metric_results[4]["Values"][0], [0.2, 0.1])
     
-    
+    no_new_laads_alarm_status = 'DANGER' if no_new_laads_alarm['StateValue'] == 'In alarm' else 'ALERT' if no_new_laads_alarm['StateValue'] == 'Insufficient data' else no_new_laads_alarm['StateValue'] 
+
     no_new_laads_alarm_info = {
         'Atmospheric Parameters Received': {
-            'state': no_new_laads_alarm['StateValue'],
+            'state': no_new_laads_alarm_status,
             'state_transitioned_timestamp': no_new_laads_alarm['StateTransitionedTimestamp'],
             'state_updated_timestamp': no_new_laads_alarm['StateUpdatedTimestamp']
         }
@@ -84,11 +86,13 @@ def lambda_handler(event, context):
         **no_new_laads_alarm_info,
         'Produced Granules w/in Expected Range': {
             'state': s30_granulues_produced_status,
+            'info': s30_granulues_produced_info,
             'state_transitioned_timestamp': metric_results[0]["Timestamps"][0],
             'state_updated_timestamp': metric_results[0]["Timestamps"][0],
         },
         'Nominal % Processing Errors': {
             'state': s30_nominal_failed_status,
+            'info': s30_nominal_failed_info,
             'state_transitioned_timestamp': metric_results[0]["Timestamps"][0],
             'state_updated_timestamp': metric_results[0]["Timestamps"][0]
         }
@@ -98,40 +102,46 @@ def lambda_handler(event, context):
         **no_new_laads_alarm_info,
         'Produced Granules w/in Expected Range': {
             'state': l30_granulues_produced_status,
+            'info': l30_granulues_produced_info,
             'state_transitioned_timestamp': metric_results[3]["Timestamps"][0],
             'state_updated_timestamp': metric_results[3]["Timestamps"][0],
         },
         'Nominal % Processing Errors': {
             'state': l30_nominal_failed_status,
+            'info': l30_nominal_failed_info,
             'state_transitioned_timestamp': metric_results[3]["Timestamps"][0],
             'state_updated_timestamp': metric_results[3]["Timestamps"][0]
         }
     }
     
-    s30_status = "DANGER" if s30_granulues_produced_status == "DANGER" or no_new_laads_alarm['StateValue'] == "DANGER" or s30_nominal_failed_status == "DANGER" else s30_granulues_produced_status
-    l30_status = "DANGER" if l30_granulues_produced_status == "DANGER" or no_new_laads_alarm['StateValue'] == "DANGER" or l30_nominal_failed_status == "DANGER" else l30_granulues_produced_status
+    # s30_status = "DANGER" if s30_granulues_produced_status == "DANGER" or no_new_laads_alarm['StateValue'] == "DANGER" or s30_nominal_failed_status == "DANGER" else s30_granulues_produced_status
+    # l30_status = "DANGER" if l30_granulues_produced_status == "DANGER" or no_new_laads_alarm['StateValue'] == "DANGER" or l30_nominal_failed_status == "DANGER" else l30_granulues_produced_status
 
-    # if (
-    #     s30_nominal_failed_status == 'OK' and
-    #     no_new_laads_alarm['StateValue'] == 'OK'
-    #     ):
-    #         if s30_granulues_produced_status == 'OK':
-    #             s30_status = "OK"
-    #         else:
-    #             s30_status = 'ALERT'
-    # else:
-    #     s30_status = 'DANGER'
+    if (
+        s30_nominal_failed_status == 'DANGER' or
+        no_new_laads_alarm['StateValue'] == 'DANGER'
+        ):
+            s30_status = 'DANGER'
+    elif (
+        s30_nominal_failed_status == 'ALERT' or
+        no_new_laads_alarm['StateValue'] == 'ALERT'
+        ):
+            s30_status = 'ALERT'
+    else:
+        s30_status = 'ALERT' if s30_granulues_produced_status == 'ALERT' else 'OK'
 
-    # if (
-    #     l30_nominal_failed_status == 'OK' and
-    #     no_new_laads_alarm['StateValue'] == 'OK'
-    #     ):
-    #         if l30_granulues_produced_status == 'OK':
-    #             l30_status = "OK"
-    #         else:
-    #             l30_status = 'ALERT'
-    # else:
-    #     l30_status = 'DANGER'
+    if (
+        l30_nominal_failed_status == 'DANGER' or
+        no_new_laads_alarm['StateValue'] == 'DANGER'
+        ):
+            l30_status = 'DANGER'
+    elif (
+        l30_nominal_failed_status == 'ALERT' or
+        no_new_laads_alarm['StateValue'] == 'ALERT'
+        ):
+            l30_status = 'ALERT'
+    else:
+        l30_status = 'ALERT' if l30_granulues_produced_status == 'ALERT' else 'OK'
     
     alarms_res = [
         {'alarms': l30_alarms_res, 'status': l30_status, 'alarm_name': 'L30 Status', 'state_updated_timestamp': metric_results[3]["Timestamps"][0]},
