@@ -1,0 +1,53 @@
+name: Deploy BackEnd changes to AWS Lambda
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+        - backend/**
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.11
+
+    - name: Deploy modified functions
+      run: |
+        cd backend/get_alarm_metrics
+        echo "Deploying get_alarm_metrics..."
+        zip -r get_alarm_metrics.zip lambda_function.py
+        aws lambda update-function-code --function-name get_alarm_metrics --zip-file fileb://get_alarm_metrics.zip
+        cd ..
+        
+        cd get_metrics
+        echo "Deploying get_metrics..."
+        zip -r get_metrics.zip lambda_function.py
+        aws lambda update-function-code --function-name get_metrics --zip-file fileb://get_metrics.zip
+        cd ..
+        
+        cd get_rss
+        echo "Deploying get_rss..."
+        zip -r get_rss.zip lambda_function.py
+        aws lambda update-function-code --function-name get_rss --zip-file fileb://get_rss.zip
+        cd ..
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
+        
+ 
+  
+  
+  
+  
+  
+  

@@ -1,4 +1,4 @@
-name: main-build-and-deploy
+name: Deploy FrontEnd Changes to AWS S3 for main branch
 
 on:
   push:
