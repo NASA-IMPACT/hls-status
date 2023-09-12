@@ -34,7 +34,7 @@ jobs:
         AWS_DEFAULT_REGION: ${{ secrets.AWS_REGION }}
       run: |
         echo "Deploying get_alarm_metrics..."
-        zip -r get_alarm_metrics.zip get_alarm_metrics.py
+        zip -r get_alarm_metrics.zip backend/get_alarm_metrics.py
         aws lambda update-function-code --function-name GetAlarmMetricsFunction --zip-file fileb://get_alarm_metrics.zip
         
         echo "Deploying get_metrics..."
