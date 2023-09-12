@@ -10,6 +10,8 @@ function Alarm({ alarm }) {
           <div className="alarm-header">
             <div className="alarm-details">
               <h3 className="alarm-title">{alarmKey}</h3>
+              {alarm[alarmKey].state !== 'OK' ? (
+                <div className="alarm-info">{alarm[alarmKey].info}</div>) : null}
               <div className="alarm-timestamp">{formatDate(alarm[alarmKey].state_updated_timestamp)}</div>
             </div>
           </div>
