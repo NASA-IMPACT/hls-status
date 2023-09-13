@@ -6,7 +6,7 @@ Resources:
   GetAlarmMetricsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: get_alarm_metrics.lambda_handler
+      Handler: get_alarm_metrics/lambda_function.lambda_handler
       Runtime: python3.11
       CodeUri: ./
       MemorySize: 512
@@ -22,7 +22,7 @@ Resources:
   GetMetricsFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: get_metrics.lambda_handler
+      Handler: get_metrics/lambda_function.lambda_handler
       Runtime: python3.11
       CodeUri: ./
       MemorySize: 512
@@ -38,7 +38,7 @@ Resources:
   GetRSSFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: get_rss.lambda_handler
+      Handler: get_rss/lambda_function.lambda_handler
       Runtime: python3.11
       CodeUri: ./
       MemorySize: 512
