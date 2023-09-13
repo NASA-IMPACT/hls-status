@@ -20,7 +20,7 @@ function ContactSection() {
           </p>
           <p>
             <i className="fas fa-phone"></i>
-            256-961-70000
+            256-961-7000
           </p>
         </div>
       </div>
