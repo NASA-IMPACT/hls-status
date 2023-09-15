@@ -9,7 +9,7 @@ Webpage to display metrics from the cloud processing and provide status based on
 - **REST API Layer:** AWS Lambda
 
 ## Rest API Endpoints
-### GET /alarms/
+### GET /alarms-metrics/
 
 Get the alarms status for the following alarms:
 - L30
@@ -24,14 +24,14 @@ Get the alarms status for the following alarms:
 
 **Example Request**
 ```bash
-curl '/alarm-metrics/'
+curl 'https://8t9mp1rqui.execute-api.us-west-2.amazonaws.com/dev/alarm-metrics/'
 ```
 
 **Example Response**
 ```json
 {
   "status_code": 200,
-  "body": "[{\"alarms\": {\"Atmospheric Parameters Received\": {\"state\": \"OK\", \"state_transitioned_timestamp\": \"2023-08-22 19:09:30.594000+00:00\", \"state_updated_timestamp\": \"2023-08-22 19:09:30.594000+00:00\"}, \"Produced Granules w/in Expected Range\": {\"state\": \"OK\", \"info\": \"OK\", \"state_transitioned_timestamp\": \"2023-09-11 20:58:00+00:00\", \"state_updated_timestamp\": \"2023-09-11 20:58:00+00:00\"}, \"Nominal % Processing Errors\": {\"state\": \"OK\", \"info\": \"OK\", \"state_transitioned_timestamp\": \"2023-09-11 20:58:00+00:00\", \"state_updated_timestamp\": \"2023-09-11 20:58:00+00:00\"}}, \"status\": \"OK\", \"alarm_name\": \"L30 Status\", \"state_updated_timestamp\": \"2023-09-11 20:58:00+00:00\"}, {\"alarms\": {\"Atmospheric Parameters Received\": {\"state\": \"OK\", \"state_transitioned_timestamp\": \"2023-08-22 19:09:30.594000+00:00\", \"state_updated_timestamp\": \"2023-08-22 19:09:30.594000+00:00\"}, \"Produced Granules w/in Expected Range\": {\"state\": \"OK\", \"info\": \"OK\", \"state_transitioned_timestamp\": \"2023-09-11 20:58:00+00:00\", \"state_updated_timestamp\": \"2023-09-11 20:58:00+00:00\"}, \"Nominal % Processing Errors\": {\"state\": \"OK\", \"info\": \"OK\", \"state_transitioned_timestamp\": \"2023-09-11 20:58:00+00:00\", \"state_updated_timestamp\": \"2023-09-11 20:58:00+00:00\"}}, \"status\": \"OK\", \"alarm_name\": \"S30 Status\", \"state_updated_timestamp\": \"2023-09-11 20:58:00+00:00\"}]"
+  "body": "[{\"alarms\": {\"Atmospheric Parameters Received\": {\"state\": \"OK\", \"state_transitioned_timestamp\": \"2023-08-22 19:09:30.594000+00:00\", \"state_updated_timestamp\": \"2023-08-22 19:09:30.594000+00:00\"}, \"Produced Granules w/in Expected Range\": {\"state\": \"OK\", \"info\": \"OK\", \"state_transitioned_timestamp\": \"2023-09-14 15:17:00+00:00\", \"state_updated_timestamp\": \"2023-09-14 15:17:00+00:00\"}, \"Nominal % Processing Errors\": {\"state\": \"OK\", \"info\": \"OK\", \"state_transitioned_timestamp\": \"2023-09-14 15:17:00+00:00\", \"state_updated_timestamp\": \"2023-09-14 15:17:00+00:00\"}}, \"status\": \"OK\", \"alarm_name\": \"L30 Status\", \"state_updated_timestamp\": \"2023-09-14 15:17:00+00:00\"}, {\"alarms\": {\"Atmospheric Parameters Received\": {\"state\": \"OK\", \"state_transitioned_timestamp\": \"2023-08-22 19:09:30.594000+00:00\", \"state_updated_timestamp\": \"2023-08-22 19:09:30.594000+00:00\"}, \"Produced Granules w/in Expected Range\": {\"state\": \"OK\", \"info\": \"OK\", \"state_transitioned_timestamp\": \"2023-09-14 15:17:00+00:00\", \"state_updated_timestamp\": \"2023-09-14 15:17:00+00:00\"}, \"Nominal % Processing Errors\": {\"state\": \"OK\", \"info\": \"OK\", \"state_transitioned_timestamp\": \"2023-09-14 15:17:00+00:00\", \"state_updated_timestamp\": \"2023-09-14 15:17:00+00:00\"}}, \"status\": \"OK\", \"alarm_name\": \"S30 Status\", \"state_updated_timestamp\": \"2023-09-14 15:17:00+00:00\"}]"
 }
 ```
 
@@ -58,7 +58,7 @@ Retrieve metric data about granules produced for the following alarms:
 
 **Example Request:**
 ```bash
-curl 'https://6af2xo7p46.execute-api.us-east-2.amazonaws.com/dev/metrics/?metric=l30&period=24'
+curl 'https://8t9mp1rqui.execute-api.us-west-2.amazonaws.com/dev/metrics/?metric=l30&period=24'
 ```
 
 **Parameters:**
@@ -82,7 +82,7 @@ Retrieve the RSS feed from the United States Geological Survey website.
 
 **Example Request:**
 ```bash
-curl  'https://6af2xo7p46.execute-api.us-east-2.amazonaws.com/dev/rss/'
+curl  'https://8t9mp1rqui.execute-api.us-west-2.amazonaws.com/dev/rss/'
 ```
 
 **Example Response**
