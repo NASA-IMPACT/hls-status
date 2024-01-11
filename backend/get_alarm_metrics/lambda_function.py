@@ -54,6 +54,9 @@ def lambda_handler(event, context):
         
     end_time = datetime.now()
     start_time = end_time - timedelta(hours=period)
+    # end_time = datetime.now()
+    end_time_midnight = end_time.replace(hour=0, minute=0, second=0)
+    start_time = end_time_midnight - timedelta(hours=period)
         
     no_new_laads_alarm_response = cloudwatch.describe_alarms(AlarmNames=[no_new_laads_alarm_name])
     no_new_laads_alarm = no_new_laads_alarm_response['MetricAlarms'][0]
@@ -63,15 +66,16 @@ def lambda_handler(event, context):
         StartTime=start_time,
         EndTime=end_time
     )
-    metric_results = response["MetricDataResults"]
 
+    metric_results = response["MetricDataResults"]    
+    
     s30_granulues_produced_status, s30_granulues_produced_info  = granules_status_determination(metric_results[0]["Values"][0], [5000, 7000])
     l30_granulues_produced_status, l30_granulues_produced_info = granules_status_determination(metric_results[3]["Values"][0], [5000, 7000])
     
     s30_nominal_failed_status, s30_nominal_failed_info = error_status_determination(metric_results[2]["Values"][0] / metric_results[1]["Values"][0], [0.2, 0.1])
     l30_nominal_failed_status, l30_nominal_failed_info = error_status_determination(metric_results[5]["Values"][0] / metric_results[4]["Values"][0], [0.2, 0.1])
     
-    no_new_laads_alarm_status = 'DANGER' if no_new_laads_alarm['StateValue'] == 'In alarm' else 'ALERT' if no_new_laads_alarm['StateValue'] == 'Insufficient data' else no_new_laads_alarm['StateValue'] 
+    no_new_laads_alarm_status = 'DANGER' if no_new_laads_alarm['StateValue'] == 'ALARM' else 'ALERT' if no_new_laads_alarm['StateValue'] == 'Insufficient data' else no_new_laads_alarm['StateValue'] 
 
     no_new_laads_alarm_info = {
         'Atmospheric Parameters Received': {
@@ -127,7 +131,7 @@ def lambda_handler(event, context):
         ):
             s30_status = 'ALERT'
     else:
-        s30_status = 'ALERT' if s30_granulues_produced_status == 'ALERT' else 'OK'
+        s30_status = 'ALERT' if (s30_granulues_produced_status == 'ALERT' or s30_granulues_produced_status == 'DANGER') else 'OK'
 
     if (
         l30_nominal_failed_status == 'DANGER' or
@@ -140,7 +144,7 @@ def lambda_handler(event, context):
         ):
             l30_status = 'ALERT'
     else:
-        l30_status = 'ALERT' if l30_granulues_produced_status == 'ALERT' else 'OK'
+        l30_status = 'ALERT' if (l30_granulues_produced_status == 'ALERT' or l30_granulues_produced_status == 'DANGER') else 'OK'
     
     alarms_res = [
         {'alarms': l30_alarms_res, 'status': l30_status, 'alarm_name': 'L30 Status', 'state_updated_timestamp': metric_results[3]["Timestamps"][0]},
